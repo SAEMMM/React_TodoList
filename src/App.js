@@ -8,13 +8,16 @@ function Todo(props) {
         <h3>{props.todo.title}</h3>
         <p>{props.todo.content}</p>
         <div className='btns'>
-          <button className='delBtn'>포기하기</button>
+          <button onClick={() => props.delBtnHandler(props.todo.id)}
+            className='delBtn'>포기하기</button>
           <button className='doneBtn'>내가해냄</button>
         </div>
       </div>
     </div>
   )
 }
+
+
 function App() {
   const [todo, setTodo] = useState([
     { id: 1, title: '리액트 장인되기', content: 'R반의 리액트 장인이 되는 것' },
@@ -43,6 +46,11 @@ function App() {
     setContent('')
   }
 
+  const delBtnHandler = (id) => {
+    const newTodoList = todo.filter((todo) => todo.id !== id)
+    setTodo(newTodoList)
+  }
+
   return (
     <div className='all-style'>
       <div className='header-title'>샘스 Todo List</div>
@@ -60,7 +68,10 @@ function App() {
       <div className='body-style'>
         <h2>열심히 하는 중.. 🔥</h2>
         {todo.map((todo) => {
-          return <Todo todo={todo} key={todo.id} />
+          return <Todo
+            todo={todo}
+            key={todo.id}
+            delBtnHandler={delBtnHandler} />
         })}
         {/* <div className='body-cards'>
           <div>
