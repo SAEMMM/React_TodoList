@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 
-function Todo(props) {
+function TodoIng(props) {
   return (
     <div className='body-cards'>
       <div>
@@ -10,7 +10,8 @@ function Todo(props) {
         <div className='btns'>
           <button onClick={() => props.delBtnHandler(props.todo.id)}
             className='delBtn'>포기하기</button>
-          <button className='doneBtn'>내가해냄</button>
+          <button onClick={() => props.doneBtnHandler(props.todo.id)}
+            className='doneBtn'>내가해냄</button>
         </div>
       </div>
     </div>
@@ -20,8 +21,8 @@ function Todo(props) {
 
 function App() {
   const [todo, setTodo] = useState([
-    { id: 1, title: '리액트 장인되기', content: 'R반의 리액트 장인이 되는 것' },
-    { id: 2, title: '리액트 장인되기', content: 'R반의 리액트 장인이 되는 것' },
+    { id: 1, title: '리액트 장인되기1', content: 'R반의 리액트 장인이 되는 것1' },
+    { id: 2, title: '리액트 장인되기2', content: 'R반의 리액트 장인이 되는 것2' },
   ])
 
   const [title, setTitle] = useState('')
@@ -50,6 +51,8 @@ function App() {
     const newTodoList = todo.filter((todo) => todo.id !== id)
     setTodo(newTodoList)
   }
+  const doneBtnHandler = (id) => {
+  }
 
   return (
     <div className='all-style'>
@@ -68,33 +71,14 @@ function App() {
       <div className='body-style'>
         <h2>열심히 하는 중.. 🔥</h2>
         {todo.map((todo) => {
-          return <Todo
+          return <TodoIng
             todo={todo}
             key={todo.id}
-            delBtnHandler={delBtnHandler} />
+            delBtnHandler={delBtnHandler}
+            doneBtnHandler={doneBtnHandler} />
         })}
-        {/* <div className='body-cards'>
-          <div>
-            <h3>리액트 장인되기</h3>
-            <p>R반의 리액트 장인이 되는 것</p>
-            <div className='btns'>
-              <button className='delBtn'>포기하기</button>
-              <button className='doneBtn'>내가해냄</button>
-            </div>
-          </div>
-        </div> */}
         <div className='float-none'></div>
         <h2>해내고 말았다!! 🎉</h2>
-        <div className='body-cards'>
-          <div>
-            <h3>리액트 장인되기</h3>
-            <p>R반의 리액트 장인이 되는 것</p>
-            <div className='btns'>
-              <button className='delBtn'>포기하기</button>
-              <button className='doneBtn'>내가해냄</button>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
