@@ -1,28 +1,88 @@
 import React, { useState } from 'react';
 import './App.css';
 
-function Todo(props) {
+function Todo({ todo, setTodo }) {
+  const delBtnHandler = (id) => {
+    const newTodoList = todo.filter((todo) => todo.id !== id)
+    setTodo(newTodoList)
+  }
+  const doneBtnHandler = (done) => {
+    const newDoneTodo = todo.map((todo) => {
+      if (todo.id === done) {
+        return {
+          ...todo,
+          done: !todo.done
+        }
+      } else {
+        return { ...todo }
+      }
+    })
+
+    setTodo(newDoneTodo)
+  }
   return (
-      <div className='body-cards'>
-        <div>
-          <h3>{props.todo.title}</h3>
-          <p>{props.todo.content}</p>
-          <div className='btns'>
-            <button onClick={() => props.delBtnHandler(props.todo.id)}
-              className='delBtn'>포기하기</button>
-            <button onClick={() => props.doneBtnHandler(props.todo.id)}
-              className='doneBtn'>내가해냄</button>
-          </div>
-        </div>
-      </div>
+    <div className='body-style'>
+      <h2>열심히 하는 중.. 🔥</h2>
+      {todo.map((todo) => {
+        if (!todo.done) {
+          return (
+            <Button
+              todo={todo}
+              title={todo.title}
+              content={todo.content}
+              key={todo.id}
+              delBtnHandler={delBtnHandler}
+              doneBtnHandler={doneBtnHandler} />)
+        } else {
+          return null
+        }
+      })}
+
+      <div className='float-none'></div>
+
+      <h2>해내고 말았다!! 🎉</h2>
+      {todo.map((todo) => {
+        if (todo.done) {
+          return (
+            <Button
+              todo={todo}
+              title={todo.title}
+              content={todo.content}
+              key={todo.id}
+              delBtnHandler={delBtnHandler}
+              doneBtnHandler={doneBtnHandler} />)
+        } else {
+          return null
+        }
+      })}
+    </div>
   )
 }
+
+function Button({todo, doneBtnHandler, delBtnHandler}) {
+  return (
+    <div className='body-cards'>
+    <div>
+      <h3>{todo.title}</h3>
+      <p>{todo.content}</p>
+      <div className='btns'>
+        <button onClick={() => delBtnHandler(todo.id)}
+          className='delBtn'>포기하기</button>
+        <button onClick={() => doneBtnHandler(todo.id)}
+          className='doneBtn'>{todo.done ? '다시하기' : '내가해냄'}</button>
+      </div>
+    </div>
+  </div>
+  )
+}
+
+
 
 function App() {
   // 열심히 하는 중 list
   const [todo, setTodo] = useState([
-    { id: 1, title: '리액트 장인되기1', content: 'R반의 리액트 장인이 되는 것1' },
-    { id: 2, title: '리액트 장인되기2', content: 'R반의 리액트 장인이 되는 것2' },
+    { id: 1, title: '리액트 장인되기1', content: '리액트 장인이 되는 것1', done: false },
+    { id: 2, title: '리액트 장인되기2', content: '리액트 장인이 되는 것2', done: true }
   ])
 
   // 완료 list
@@ -53,10 +113,15 @@ function App() {
     setContent('')
   }
 
-  // 포기하기
+  // todo에서 포기하기
   const delBtnHandler = (id) => {
     const newTodoList = todo.filter((todo) => todo.id !== id)
     setTodo(newTodoList)
+  }
+  // done에서 포기하기
+  const doneDelBtnHandler = (id) => {
+    const newDoneList = doneTodo.filter((done) => done.id !== id)
+    setTodo(newDoneList)
   }
 
   // 내가해냄(todo에서 done으로 이동)
@@ -90,33 +155,7 @@ function App() {
           onClick={clickAddButtonHandler}>추가하기</button>
       </div>
 
-      <div className='body-style'>
-        <h2>열심히 하는 중.. 🔥</h2>
-        {todo.map((todo) => {
-          return (
-            <Todo
-              todo={todo}
-              title={todo.title}
-              content={todo.content}
-              key={todo.id}
-              delBtnHandler={delBtnHandler}
-              doneBtnHandler={doneBtnHandler} />)
-        })}
-
-        <div className='float-none'></div>
-
-        <h2>해내고 말았다!! 🎉</h2>
-        {doneTodo.map((done) => {
-          return (
-            <Todo
-              todo={done}
-              title={done.title}
-              content={done.content}
-              key={done.id}
-              delBtnHandler={delBtnHandler}
-              reDoBtnHandler={reDoBtnHandler} />)
-        })}
-      </div>
+    <Todo todo={todo} setTodo={setTodo} />
     </div>
   );
 }
